@@ -1,0 +1,35 @@
+//s1 luu gia tri cua i; s4: buoc nhay ; s2: dia chi co so  cua A; s3: n; t3 : max
+#include <iregdef.h>
+.data
+	A: .word 2,3,4,5,2
+.text
+.set reorder
+.globl start
+.ent start
+start:
+	la   s2,A
+	addi s1,zero,0
+	addi s3,zero,5
+	addi s4,zero,1
+	slti t5,s2,0 # if(a[0]<0)
+	bne  t5,0,L2 
+	sub  s2,zero,s2
+L2:	add  t3,zero,s2 # t3 : max
+	addi t4,zero,0	# index of max
+		
+loop:
+	add 	s1,s1,s4		#i=i+step
+	add 	t1,s1,s1		#t1=2*s1
+	add		t1,t1,t1		#t1=4*s1	
+	add	    t1,t1,s2		#t1 store the address of A[i]
+	slti 	t5,t1,0 		# if(a[0]<0)
+	bne  	t5,0,L3 
+	sub  	s2,zero,s2
+L3: 
+	lw	    t0,0(t1)		#load value of A[i] in t0
+	slt     t5,t0,t3		# if a[i] <max
+	bne 	t5,zero,L1	
+	add 	t3,zero,t0
+	add 	t4,zero,s1
+L1:
+	bne		s1,s3,loop		#if i != n, goto loop
